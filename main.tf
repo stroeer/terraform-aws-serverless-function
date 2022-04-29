@@ -1,5 +1,5 @@
 locals {
-  lambda_name = ""
+  lambda_name = "${var.prefix}${var.name}${var.suffix}"
 }
 
 data "archive_file" "code" {
