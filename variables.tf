@@ -1,6 +1,6 @@
 variable "artifact_folder" {
   type        = string
-  description = "The folder where the built of your function reside."
+  description = "The folder where the src or binary of your function resides for bundling."
   default     = "./.artifacts"
 }
 
