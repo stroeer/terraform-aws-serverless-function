@@ -64,3 +64,16 @@ variable "inline_policies" {
   description = "A list of policy statements, in json, which will be set on the created role of the lambda function."
   default     = []
 }
+
+variable "logs" {
+  type = object({
+    enabled = bool
+    retention = optional(number)
+  })
+
+  description = "Enables cloudwatch logging with the given retention in days and also adds the needed iam policies to your lambda."
+  default = {
+    enabled = false
+    retention = 1
+  }
+}
