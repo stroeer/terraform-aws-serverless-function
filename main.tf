@@ -1,5 +1,9 @@
 locals {
   lambda_name = "${var.prefix}${var.name}${var.suffix}"
+  logs = defaults(var.logs, {
+    enabled = false,
+    retention = 30
+  })
 }
 
 data "archive_file" "code" {
