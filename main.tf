@@ -63,8 +63,16 @@ resource "aws_lambda_function" "lambda" {
     }
   }
   depends_on = [
-    data.archive_file.code
+    data.archive_file.code,
+    aws_iam_role_policy_attachment.lambda_logs,
+    aws_cloudwatch_log_group.lambda,
   ]
+}
+
+resource "aws_cloudwatch_log_group" "lambda" {
+  count = local.logs.enabled ? 1 : 0
+  name = "/aws/lambda/${local.lambda_name}"
+  retention_in_days = local.logs.retention
 }
 
 data "aws_iam_policy" "logging_policy" {
@@ -72,7 +80,7 @@ data "aws_iam_policy" "logging_policy" {
   name = "AWSLambdaBasicExecutionRole"
 }
 
-resource "aws_iam_role_policy_attachment" "logging_policy" {
+resource "aws_iam_role_policy_attachment" "lambda_logs" {
   count = local.logs.enabled ? 1 : 0
   policy_arn = data.aws_iam_policy.logging_policy[0].arn
   role       = aws_iam_role.lambda.name
