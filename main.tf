@@ -66,3 +66,14 @@ resource "aws_lambda_function" "lambda" {
     data.archive_file.code
   ]
 }
+
+data "aws_iam_policy" "logging_policy" {
+  count = local.logs.enabled ? 1 : 0
+  name = "AWSLambdaBasicExecutionRole"
+}
+
+resource "aws_iam_role_policy_attachment" "logging_policy" {
+  count = local.logs.enabled ? 1 : 0
+  policy_arn = data.aws_iam_policy.logging_policy[0].arn
+  role       = aws_iam_role.lambda.name
+}
