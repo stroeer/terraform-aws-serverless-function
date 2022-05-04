@@ -68,6 +68,9 @@ resource "aws_lambda_function" "lambda" {
     aws_iam_role_policy_attachment.lambda_logs,
     aws_cloudwatch_log_group.lambda,
   ]
+  lifecycle {
+    ignore_changes = var.init_empty ? [filename, source_code_hash] : []
+  }
 }
 
 resource "aws_cloudwatch_log_group" "lambda" {
