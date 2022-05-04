@@ -4,11 +4,12 @@ locals {
     enabled = false,
     retention = 30
   })
+  source_file = var.init_empty ? "README.md" : "${var.artifact_folder}/${var.name}"
 }
 
 data "archive_file" "code" {
   type        = "zip"
-  source_file = "${var.artifact_folder}/${var.name}"
+  source_file = local.source_file
   output_path = "${var.name}.zip"
 }
 
