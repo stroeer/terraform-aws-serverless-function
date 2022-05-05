@@ -48,6 +48,31 @@ resource "aws_iam_role_policy" "lambda_policies" {
 }
 
 resource "aws_lambda_function" "lambda" {
+  count = var.init_empty ? 0 : 1
+  description      = "The lambda function which executes your code."
+  function_name    = local.lambda_name
+  runtime          = var.runtime
+  memory_size      = var.memory
+  filename         = data.archive_file.code.output_path
+  source_code_hash = data.archive_file.code.output_base64sha256
+  handler          = var.name
+  timeout          = var.timeout
+  role             = aws_iam_role.lambda.arn
+  dynamic "environment" {
+    for_each = length(var.environment_vars) > 0 ? [1] : []
+    content {
+      variables = var.environment_vars
+    }
+  }
+  depends_on = [
+    data.archive_file.code,
+    aws_iam_role_policy_attachment.lambda_logs,
+    aws_cloudwatch_log_group.lambda,
+  ]
+}
+
+resource "aws_lambda_function" "empty_lambda" {
+  count = var.init_empty ? 1 : 0
   description      = "The lambda function which executes your code."
   function_name    = local.lambda_name
   runtime          = var.runtime
@@ -69,7 +94,9 @@ resource "aws_lambda_function" "lambda" {
     aws_cloudwatch_log_group.lambda,
   ]
   lifecycle {
-    ignore_changes = var.init_empty ? [filename, source_code_hash] : []
+    ignore_changes = [
+      filename,
+      source_code_hash]
   }
 }
 
