@@ -1,5 +1,5 @@
 output "lambda" {
-  value = aws_lambda_function.lambda
+  value = var.init_empty ? aws_lambda_function.empty_lambda : aws_lambda_function.lambda
 }
 
 output "lambda_role" {
