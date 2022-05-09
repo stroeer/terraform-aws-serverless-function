@@ -1,7 +1,7 @@
 locals {
   lambda_name = "${var.prefix}${var.name}${var.suffix}"
   logs = defaults(var.logs, {
-    enabled = false,
+    enabled   = false,
     retention = 30
   })
   source_file = var.init_empty ? "README.md" : "${var.artifact_folder}/${var.name}"
@@ -48,8 +48,8 @@ resource "aws_iam_role_policy" "lambda_policies" {
 }
 
 resource "aws_lambda_function" "lambda" {
-  count = var.init_empty ? 0 : 1
-  description      = "The lambda function which executes your code."
+  count            = var.init_empty ? 0 : 1
+  description      = var.description
   function_name    = local.lambda_name
   runtime          = var.runtime
   memory_size      = var.memory
@@ -72,8 +72,8 @@ resource "aws_lambda_function" "lambda" {
 }
 
 resource "aws_lambda_function" "empty_lambda" {
-  count = var.init_empty ? 1 : 0
-  description      = "The lambda function which executes your code."
+  count            = var.init_empty ? 1 : 0
+  description      = var.description
   function_name    = local.lambda_name
   runtime          = var.runtime
   memory_size      = var.memory
@@ -96,23 +96,23 @@ resource "aws_lambda_function" "empty_lambda" {
   lifecycle {
     ignore_changes = [
       filename,
-      source_code_hash]
+    source_code_hash]
   }
 }
 
 resource "aws_cloudwatch_log_group" "lambda" {
-  count = local.logs.enabled ? 1 : 0
-  name = "/aws/lambda/${local.lambda_name}"
+  count             = local.logs.enabled ? 1 : 0
+  name              = "/aws/lambda/${local.lambda_name}"
   retention_in_days = local.logs.retention
 }
 
 data "aws_iam_policy" "logging_policy" {
   count = local.logs.enabled ? 1 : 0
-  name = "AWSLambdaBasicExecutionRole"
+  name  = "AWSLambdaBasicExecutionRole"
 }
 
 resource "aws_iam_role_policy_attachment" "lambda_logs" {
-  count = local.logs.enabled ? 1 : 0
+  count      = local.logs.enabled ? 1 : 0
   policy_arn = data.aws_iam_policy.logging_policy[0].arn
   role       = aws_iam_role.lambda.name
 }

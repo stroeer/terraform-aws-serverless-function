@@ -4,9 +4,15 @@ variable "artifact_folder" {
   default     = "./.artifacts"
 }
 
+variable "description" {
+  type        = string
+  description = "The description of your lambda. Used for documenting purposes."
+  default     = ""
+}
+
 variable "name" {
   type        = string
-  description = "The name of your function. This must match the name of the binary."
+  description = "The name of your function. This must match the name of your binary in case of types [go]."
 }
 
 variable "prefix" {
@@ -67,24 +73,24 @@ variable "inline_policies" {
 
 variable "logs" {
   type = object({
-    enabled = bool
+    enabled   = bool
     retention = optional(number)
   })
 
   description = "Enables cloudwatch logging with the given retention in days and also adds the needed iam policies to your lambda."
   default = {
-    enabled = false
+    enabled   = false
     retention = 30
   }
 
   validation {
-    condition = var.logs.enabled ? contains([0, 1, 3, 5, 7, 14, 30, 60, 90, 120, 150, 180, 365, 400, 545, 731, 1827, 3653], var.logs.retention) : true
+    condition     = var.logs.enabled ? contains([0, 1, 3, 5, 7, 14, 30, 60, 90, 120, 150, 180, 365, 400, 545, 731, 1827, 3653], var.logs.retention) : true
     error_message = "Only one of theese values are allowed for retention: [0, 1, 3, 5, 7, 14, 30, 60, 90, 120, 150, 180, 365, 400, 545, 731, 1827, 3653]."
   }
 }
 
 variable "init_empty" {
-  type = bool
+  type        = bool
   description = "Controls wether the module should init the lambda with an empty archive file. This comes handy when you want to seperate infrastructure changes from application changes in your workflow."
-  default = false
+  default     = false
 }
