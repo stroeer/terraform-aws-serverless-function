@@ -1,7 +1,14 @@
-variable "artifact_folder" {
-  type        = string
-  description = "The folder where the src or binary of your function resides for bundling."
-  default     = "./.artifacts"
+variable "bundle" {
+  type = object({
+    enabled : optional(bool)
+    source_folder : optional(string)
+  })
+
+  description = "Controls wether the module should bundle code with the created lambda or use an empty archive file. Using an empty archive comes in handy when you want to seperate infrastructure changes from application changes in your workflow. When bundling you can also specify the folder where the src or binary of your function resides."
+  default = {
+    enabled       = true
+    source_folder = "./.artifacts"
+  }
 }
 
 variable "description" {
@@ -73,12 +80,6 @@ variable "logs" {
     condition     = var.logs.enabled ? contains([0, 1, 3, 5, 7, 14, 30, 60, 90, 120, 150, 180, 365, 400, 545, 731, 1827, 3653], var.logs.retention) : true
     error_message = "Only one of theese values are allowed for retention: [0, 1, 3, 5, 7, 14, 30, 60, 90, 120, 150, 180, 365, 400, 545, 731, 1827, 3653]."
   }
-}
-
-variable "init_empty" {
-  type        = bool
-  description = "Controls wether the module should init the lambda with an empty archive file. This comes handy when you want to seperate infrastructure changes from application changes in your workflow."
-  default     = false
 }
 
 variable "type" {

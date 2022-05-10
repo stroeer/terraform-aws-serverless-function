@@ -1,11 +1,18 @@
 locals {
-  lambda_name = "${var.prefix}${var.name}${var.suffix}"
   logs = defaults(var.logs, {
     enabled   = false,
     retention = 30
   })
+
+  bundle = defaults(var.bundle, {
+    enabled       = true,
+    source_folder = "./artifacts"
+  })
+
+  lambda_name          = "${var.prefix}${var.name}${var.suffix}"
   single_binary_source = var.type == "go"
-  source               = var.init_empty ? "${path.module}/README.md" : local.single_binary_source ? "${var.artifact_folder}/${var.name}" : var.artifact_folder
+  source               = !local.bundle.enabled ? "${path.module}/README.md" : local.single_binary_source ? "${local.bundle.source_folder}/${var.name}" : local.bundle.source_folder
+
   latest_runtimes = {
     "go" : "go1.x",
     "node" : "node14.x",
@@ -59,7 +66,7 @@ resource "aws_iam_role_policy" "lambda_policies" {
 }
 
 resource "aws_lambda_function" "lambda" {
-  count            = var.init_empty ? 0 : 1
+  count            = local.bundle.enabled ? 1 : 0
   description      = var.description
   function_name    = local.lambda_name
   runtime          = local.runtime
@@ -83,7 +90,7 @@ resource "aws_lambda_function" "lambda" {
 }
 
 resource "aws_lambda_function" "empty_lambda" {
-  count            = var.init_empty ? 1 : 0
+  count            = local.bundle.enabled ? 0 : 1
   description      = var.description
   function_name    = local.lambda_name
   runtime          = local.runtime
