@@ -5,6 +5,7 @@ locals {
     retention = 30
   })
   single_binary_source = var.type == "go"
+  source = var.init_empty ? "${path.module}/README.md" : single_binary_source ? "${var.artifact_folder}/${var.name}" : var.artifact_folder
   latest_runtimes = {
     "go": "go1.x",
     "node": "node14.x"
@@ -14,7 +15,7 @@ locals {
 
 data "archive_file" "code" {
   type        = "zip"
-  source_file = local.source_file
+  source_file = local.source
   output_path = "${var.name}.zip"
 }
 
