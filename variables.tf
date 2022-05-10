@@ -7,7 +7,7 @@ variable "bundle" {
   default = null
 
   validation {
-    condition     = var.bundle == null || var.bundle.enabled == null || var.bundle.enabled || (!var.bundle.enabled && var.bundle.source_folder == null)
+    condition     = var.bundle == null ? true : var.bundle.enabled == null ? true : var.bundle.enabled ? true : (!var.bundle.enabled && var.bundle.source_folder == null)
     error_message = "When disabling bundling, you cannot set any other values on the bundle object."
   }
 }
