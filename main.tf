@@ -4,7 +4,7 @@ locals {
     enabled   = false,
     retention = 30
   })
-  source_file = var.init_empty ? "README.md" : "${var.artifact_folder}/${var.name}"
+  single_binary_source = var.type == "go"
   latest_runtimes = {
     "go": "go1.x",
     "node": "node14.x"
