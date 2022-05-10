@@ -1,8 +1,8 @@
 variable "bundle" {
-  type = object({
+  type = optional(object({
     enabled : optional(bool)
     source_folder : optional(string)
-  })
+  }))
 
   description = "Controls wether the module should bundle code with the created lambda or use an empty archive file. Using an empty archive comes in handy when you want to seperate infrastructure changes from application changes in your workflow. When bundling you can also specify the folder where the src or binary of your function resides."
 
