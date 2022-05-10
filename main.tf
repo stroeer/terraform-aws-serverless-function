@@ -5,7 +5,7 @@ locals {
     retention = 30
   })
   single_binary_source = var.type == "go"
-  source = var.init_empty ? "${path.module}/README.md" : single_binary_source ? "${var.artifact_folder}/${var.name}" : var.artifact_folder
+  source = var.init_empty ? "${path.module}/README.md" : local.single_binary_source ? "${var.artifact_folder}/${var.name}" : var.artifact_folder
   latest_runtimes = {
     "go": "go1.x",
     "node": "node14.x"
