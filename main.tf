@@ -10,7 +10,7 @@ locals {
     "go": "go1.x",
     "node": "node14.x"
   }
-  runtime = latest_runtimes[var.type]
+  runtime = local.latest_runtimes[var.type]
 }
 
 data "archive_file" "code" {
