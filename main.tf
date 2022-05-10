@@ -5,6 +5,11 @@ locals {
     retention = 30
   })
   source_file = var.init_empty ? "README.md" : "${var.artifact_folder}/${var.name}"
+  latest_runtimes = {
+    "go": "go1.x",
+    "node": "node14.x"
+  }
+  runtime = latest_runtimes[var.type]
 }
 
 data "archive_file" "code" {
@@ -51,7 +56,7 @@ resource "aws_lambda_function" "lambda" {
   count            = var.init_empty ? 0 : 1
   description      = var.description
   function_name    = local.lambda_name
-  runtime          = var.runtime
+  runtime          = local.runtime
   memory_size      = var.memory
   filename         = data.archive_file.code.output_path
   source_code_hash = data.archive_file.code.output_base64sha256
@@ -75,7 +80,7 @@ resource "aws_lambda_function" "empty_lambda" {
   count            = var.init_empty ? 1 : 0
   description      = var.description
   function_name    = local.lambda_name
-  runtime          = var.runtime
+  runtime          = local.runtime
   memory_size      = var.memory
   filename         = data.archive_file.code.output_path
   source_code_hash = data.archive_file.code.output_base64sha256
