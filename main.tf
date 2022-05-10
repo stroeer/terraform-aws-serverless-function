@@ -5,10 +5,15 @@ locals {
     retention = 30
   })
   single_binary_source = var.type == "go"
-  source = var.init_empty ? "${path.module}/README.md" : local.single_binary_source ? "${var.artifact_folder}/${var.name}" : var.artifact_folder
+  source               = var.init_empty ? "${path.module}/README.md" : local.single_binary_source ? "${var.artifact_folder}/${var.name}" : var.artifact_folder
   latest_runtimes = {
-    "go": "go1.x",
-    "node": "node14.x"
+    "go" : "go1.x",
+    "node" : "node14.x",
+    "python" : "python3.9",
+    "ruby" : "ruby2.7",
+    "java" : "java11",
+    ".net" : "dotnet6",
+    "custom" : "provided.al2"
   }
   runtime = local.latest_runtimes[var.type]
 }

@@ -39,13 +39,6 @@ variable "timeout" {
   default     = 3
 }
 
-/*
-condition = contains(["nodejs", "nodejs4.3", "nodejs4.3-edge", "nodejs6.10", "nodejs8.10", "nodejs10.x", "nodejs12.x", "nodejs14.x",
-      "python2.7", "python3.6", "python3.7", "python3.8", "python3.9", "ruby2.5", "ruby2.7",
-      "java8", "java8.al2", "java11", "dotnetcore1.0", "dotnetcore2.0", "dotnetcore2.1", "dotnetcore3.1", "dotnet6",
-    "go1.x", "provided", "provided.al2"], var.runtime)
-*/
-
 variable "environment_vars" {
   type        = map(string)
   description = "Environment variables you want to set in the lambda environment."
@@ -89,12 +82,12 @@ variable "init_empty" {
 }
 
 variable "type" {
-  type = string
+  type        = string
   description = "The type of function you are deploying."
-  default = "go"
+  default     = "go"
 
   validation {
-    condition = contains(["go", "node"], var.type)
-    error_message = "Currently only go and node functions are supported."
+    condition     = contains(["go", "node", "python", "ruby", "java", ".net", "custom"], var.type)
+    error_message = "Provide a valid type for your function from this list: [go, node, python, ruby, java, .net, custom]."
   }
 }
