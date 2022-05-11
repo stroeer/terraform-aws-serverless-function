@@ -6,7 +6,7 @@ locals {
 
   bundle = defaults(var.bundle, {
     enabled       = false,
-    source_folder = "./artifacts"
+    source_folder = "./.artifacts"
   })
 
   lambda_name = "${var.prefix}${var.name}${var.suffix}"
