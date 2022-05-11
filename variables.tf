@@ -4,10 +4,10 @@ variable "bundle" {
     source_folder : optional(string)
   })
   description = "Controls wether the module should bundle code with the created lambda or use an empty archive file. Using an empty archive comes in handy when you want to seperate infrastructure changes from application changes in your workflow. When bundling you can also specify the folder where the src or binary of your function resides."
-  default = null
+  default     = {}
 
   validation {
-    condition     = var.bundle == null ? true : var.bundle.enabled == null ? true : var.bundle.enabled ? true : (!var.bundle.enabled && var.bundle.source_folder == null)
+    condition     = var.bundle.enabled == null ? true : var.bundle.enabled ? true : (!var.bundle.enabled && var.bundle.source_folder == null)
     error_message = "When disabling bundling, you cannot set any other values on the bundle object."
   }
 }
