@@ -24,6 +24,12 @@ locals {
     "custom" : "provided.al2"
   }
   runtime = local.latest_runtimes[var.type]
+
+  handlers = {
+    "go" : var.name
+    "node" : "index.handler"
+  }
+  handler = local.handlers[var.type]
 }
 
 data "archive_file" "code" {
@@ -74,7 +80,7 @@ resource "aws_lambda_function" "lambda" {
   memory_size      = var.memory
   filename         = data.archive_file.code.output_path
   source_code_hash = data.archive_file.code.output_base64sha256
-  handler          = var.name
+  handler          = local.handler
   timeout          = var.timeout
   role             = aws_iam_role.lambda.arn
   dynamic "environment" {
@@ -98,7 +104,7 @@ resource "aws_lambda_function" "empty_lambda" {
   memory_size      = var.memory
   filename         = data.archive_file.code.output_path
   source_code_hash = data.archive_file.code.output_base64sha256
-  handler          = var.name
+  handler          = local.handler
   timeout          = var.timeout
   role             = aws_iam_role.lambda.arn
   dynamic "environment" {
