@@ -5,7 +5,7 @@ locals {
   })
 
   bundle = defaults(var.bundle, {
-    enabled       = true,
+    enabled       = false,
     source_folder = "./artifacts"
   })
 
