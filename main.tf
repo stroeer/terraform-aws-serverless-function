@@ -9,9 +9,10 @@ locals {
     source_folder = "./artifacts"
   })
 
-  lambda_name          = "${var.prefix}${var.name}${var.suffix}"
-  single_binary_source = var.type == "go"
-  source               = !local.bundle.enabled ? "${path.module}/README.md" : local.single_binary_source ? "${local.bundle.source_folder}/${var.name}" : local.bundle.source_folder
+  lambda_name = "${var.prefix}${var.name}${var.suffix}"
+
+  source_folder = var.type == "go" ? "${local.bundle.source_folder}/${var.name}" : local.bundle.source_folder
+  source        = !local.bundle.enabled ? "${path.module}/README.md" : local.source_folder
 
   latest_runtimes = {
     "go" : "go1.x",
