@@ -16,7 +16,7 @@ locals {
 
   latest_runtimes = {
     "go" : "go1.x",
-    "node" : "node14.x",
+    "node" : "nodejs14.x",
     "python" : "python3.9",
     "ruby" : "ruby2.7",
     "java" : "java11",
