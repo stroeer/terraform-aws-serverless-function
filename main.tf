@@ -30,6 +30,7 @@ locals {
     "node" : "index.handler"
   }
   handler = local.handlers[var.type]
+  architecture = var.type == "go" ? ["x86_64"] : ["arm64"]
 }
 
 data "archive_file" "code" {
@@ -83,6 +84,7 @@ resource "aws_lambda_function" "lambda" {
   handler          = local.handler
   timeout          = var.timeout
   role             = aws_iam_role.lambda.arn
+  architectures    = local.architecture
   dynamic "environment" {
     for_each = length(var.environment_vars) > 0 ? [1] : []
     content {
