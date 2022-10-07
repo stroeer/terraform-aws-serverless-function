@@ -12,7 +12,7 @@ locals {
   lambda_name = "${var.prefix}${var.name}${var.suffix}"
 
   source_folder = var.type == "go" ? "${local.bundle.source_folder}/${var.name}" : local.bundle.source_folder
-  empty_source = "${path.module}/README.md"
+  empty_source  = "${path.module}/README.md"
   source        = local.bundle.enabled && !var.destroy ? local.source_folder : local.empty_source
 
   latest_runtimes = {
@@ -30,13 +30,14 @@ locals {
     "go" : var.name
     "node" : "index.handler"
   }
-  handler = var.handler != "" ? var.handler : local.handlers[var.type]
+  handler      = var.handler != "" ? var.handler : local.handlers[var.type]
   architecture = var.type == "go" ? ["x86_64"] : ["arm64"]
 }
 
 data "archive_file" "code" {
   type        = "zip"
-  source_file = local.source
+  source_file = var.type == "go" ? local.source : null
+  source_dir  = var.type == "go" ? null : local.source
   output_path = "${var.name}.zip"
 }
 
