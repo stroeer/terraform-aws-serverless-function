@@ -94,13 +94,13 @@ variable "type" {
 }
 
 variable "handler" {
-  type = string
+  type        = string
   description = "Sets a custom name for the handler. Leave empty if you want to use the default of this module, which sets the name based on the type (runtime)."
-  default = ""
+  default     = ""
 }
 
 variable "destroy" {
-  type = bool
+  type        = bool
   description = "Acts as a flag for the tf destroy command, to configure dependent resources and data providers properly."
-  default = false
+  default     = false
 }
