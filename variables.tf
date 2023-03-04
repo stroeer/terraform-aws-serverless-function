@@ -1,7 +1,7 @@
 variable "bundle" {
   type = object({
-    enabled : optional(bool)
-    source_folder : optional(string)
+    enabled : optional(bool, false)
+    source_folder : optional(string, "./.artifacts")
   })
   description = "Controls wether the module should bundle code with the created lambda or use an empty archive file. Using an empty archive comes in handy when you want to seperate infrastructure changes from application changes in your workflow. When bundling you can also specify the folder where the src or binary of your function resides."
   nullable = false
@@ -74,11 +74,10 @@ variable "inline_policies" {
 variable "logs" {
   type = object({
     enabled   = bool
-    retention = optional(number)
+    retention = optional(number, 30)
   })
-  nullabe = false
-
   description = "Enables cloudwatch logging with the given retention in days and also adds the needed iam policies to your lambda."
+  nullabe = false
 
   validation {
     condition     = var.logs.retention == null ? true : !var.logs.enabled ? true : contains([0, 1, 3, 5, 7, 14, 30, 60, 90, 120, 150, 180, 365, 400, 545, 731, 1827, 3653], var.logs.retention)
