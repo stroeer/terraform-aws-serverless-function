@@ -4,7 +4,7 @@ variable "bundle" {
     source_folder : optional(string, "./.artifacts")
   })
   description = "Controls wether the module should bundle code with the created lambda or use an empty archive file. Using an empty archive comes in handy when you want to seperate infrastructure changes from application changes in your workflow. When bundling you can also specify the folder where the src or binary of your function resides."
-  nullable = false
+  nullable    = false
 
   validation {
     condition     = var.bundle.enabled ? true : (!var.bundle.enabled && var.bundle.source_folder == null)
@@ -21,7 +21,7 @@ variable "description" {
 variable "name" {
   type        = string
   description = "The name of your function. This must match the name of your binary in case of types [go]."
-  nullable = false
+  nullable    = false
 }
 
 variable "prefix" {
@@ -40,35 +40,35 @@ variable "memory" {
   type        = number
   description = "The memory you wish to assign to the lambda function."
   default     = 256
-  nullable = false
+  nullable    = false
 }
 
 variable "timeout" {
   type        = number
   description = "The maximum amount of time (in seconds) your function is allowed to run."
   default     = 3
-  nullable = false
+  nullable    = false
 }
 
 variable "environment_vars" {
   type        = map(string)
   description = "Environment variables you want to set in the lambda environment."
   default     = {}
-  nullable = false
+  nullable    = false
 }
 
 variable "managed_policies" {
   type        = set(string)
   description = "A set of managed policies, referenced by arn, which will be attached to the created role of the lambda function."
   default     = []
-  nullable = false
+  nullable    = false
 }
 
 variable "inline_policies" {
   type        = list(string)
   description = "A list of policy statements, in json, which will be set on the created role of the lambda function."
   default     = []
-  nullable = false
+  nullable    = false
 }
 
 variable "logs" {
@@ -77,7 +77,7 @@ variable "logs" {
     retention = optional(number, 30)
   })
   description = "Enables cloudwatch logging with the given retention in days and also adds the needed iam policies to your lambda."
-  nullabe = false
+  nullabe     = false
 
   validation {
     condition     = var.logs.retention == null ? true : !var.logs.enabled ? true : contains([0, 1, 3, 5, 7, 14, 30, 60, 90, 120, 150, 180, 365, 400, 545, 731, 1827, 3653], var.logs.retention)
@@ -88,7 +88,7 @@ variable "logs" {
 variable "type" {
   type        = string
   description = "The type of function you are deploying."
-  nullabe = false
+  nullabe     = false
 
   validation {
     condition     = contains(["go", "node", "python", "ruby", "java", ".net", "custom"], var.type)

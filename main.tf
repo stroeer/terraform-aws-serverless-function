@@ -2,8 +2,8 @@ locals {
   lambda_name = "${var.prefix}${var.name}${var.suffix}"
 
   bundled_source = var.type == "go" ? "${var.bundle.source_folder}/${var.name}" : var.bundle.source_folder
-  empty_source  = "${path.module}/README.md"
-  source        = var.bundle.enabled ? local.bundled_source : local.empty_source
+  empty_source   = "${path.module}/README.md"
+  source         = var.bundle.enabled ? local.bundled_source : local.empty_source
 
   latest_runtimes = {
     "go" : "go1.x",
