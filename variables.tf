@@ -15,7 +15,7 @@ variable "bundle" {
 variable "description" {
   type        = string
   description = "The description of your lambda. Used for documenting purposes."
-  default     = ""
+  default     = null
 }
 
 variable "name" {
