@@ -88,7 +88,7 @@ variable "logs" {
 variable "type" {
   type        = string
   description = "The type of function you are deploying."
-  default     = "go"
+  nullabe = false
 
   validation {
     condition     = contains(["go", "node", "python", "ruby", "java", ".net", "custom"], var.type)
