@@ -4,10 +4,10 @@ variable "bundle" {
     source_folder : optional(string)
   })
   description = "Controls wether the module should bundle code with the created lambda or use an empty archive file. Using an empty archive comes in handy when you want to seperate infrastructure changes from application changes in your workflow. When bundling you can also specify the folder where the src or binary of your function resides."
-  default     = {}
+  nullable = false
 
   validation {
-    condition     = var.bundle.enabled == null ? true : var.bundle.enabled ? true : (!var.bundle.enabled && var.bundle.source_folder == null)
+    condition     = var.bundle.enabled ? true : (!var.bundle.enabled && var.bundle.source_folder == null)
     error_message = "When disabling bundling, you cannot set any other values on the bundle object."
   }
 }
@@ -21,6 +21,7 @@ variable "description" {
 variable "name" {
   type        = string
   description = "The name of your function. This must match the name of your binary in case of types [go]."
+  nullable = false
 }
 
 variable "prefix" {
@@ -39,30 +40,35 @@ variable "memory" {
   type        = number
   description = "The memory you wish to assign to the lambda function."
   default     = 256
+  nullable = false
 }
 
 variable "timeout" {
   type        = number
   description = "The maximum amount of time (in seconds) your function is allowed to run."
   default     = 3
+  nullable = false
 }
 
 variable "environment_vars" {
   type        = map(string)
   description = "Environment variables you want to set in the lambda environment."
   default     = {}
+  nullable = false
 }
 
 variable "managed_policies" {
   type        = set(string)
   description = "A set of managed policies, referenced by arn, which will be attached to the created role of the lambda function."
   default     = []
+  nullable = false
 }
 
 variable "inline_policies" {
   type        = list(string)
   description = "A list of policy statements, in json, which will be set on the created role of the lambda function."
   default     = []
+  nullable = false
 }
 
 variable "logs" {
@@ -70,6 +76,7 @@ variable "logs" {
     enabled   = bool
     retention = optional(number)
   })
+  nullabe = false
 
   description = "Enables cloudwatch logging with the given retention in days and also adds the needed iam policies to your lambda."
 
@@ -93,5 +100,6 @@ variable "type" {
 variable "handler" {
   type        = string
   description = "Sets a custom name for the handler. Leave empty if you want to use the default of this module, which sets the name based on the type (runtime)."
+  nullabe = false
   default     = ""
 }
