@@ -77,7 +77,7 @@ variable "logs" {
     retention = optional(number, 30)
   })
   description = "Enables cloudwatch logging with the given retention in days and also adds the needed iam policies to your lambda."
-  nullabe     = false
+  nullable    = false
 
   validation {
     condition     = var.logs.retention == null ? true : !var.logs.enabled ? true : contains([0, 1, 3, 5, 7, 14, 30, 60, 90, 120, 150, 180, 365, 400, 545, 731, 1827, 3653], var.logs.retention)
@@ -88,7 +88,7 @@ variable "logs" {
 variable "type" {
   type        = string
   description = "The type of function you are deploying."
-  nullabe     = false
+  nullable    = false
 
   validation {
     condition     = contains(["go", "node", "python", "ruby", "java", ".net", "custom"], var.type)

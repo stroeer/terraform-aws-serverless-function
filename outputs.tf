@@ -1,5 +1,5 @@
 output "lambda" {
-  value = local.bundle.enabled ? aws_lambda_function.lambda[0] : aws_lambda_function.empty_lambda[0]
+  value = var.bundle.enabled ? aws_lambda_function.lambda[0] : aws_lambda_function.empty_lambda[0]
 }
 
 output "lambda_role" {
