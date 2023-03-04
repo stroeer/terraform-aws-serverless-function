@@ -99,6 +99,5 @@ variable "type" {
 variable "handler" {
   type        = string
   description = "Sets a custom name for the handler. Leave empty if you want to use the default of this module, which sets the name based on the type (runtime)."
-  nullabe = false
-  default     = ""
+  default     = null
 }

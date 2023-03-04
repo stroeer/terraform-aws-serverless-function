@@ -20,7 +20,7 @@ locals {
     "go" : var.name
     "node" : "index.handler"
   }
-  handler      = var.handler != "" ? var.handler : local.handlers[var.type]
+  handler      = var.handler != null ? var.handler : local.handlers[var.type]
   architecture = var.type == "go" ? ["x86_64"] : ["arm64"]
 }
 
