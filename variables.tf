@@ -84,7 +84,7 @@ variable "logs" {
   nullable = false
 
   validation {
-    condition     = var.logs.retention == null ? true : !var.logs.enabled ? true : contains([0, 1, 3, 5, 7, 14, 30, 60, 90, 120, 150, 180, 365, 400, 545, 731, 1827, 3653], var.logs.retention)
+    condition     = !var.logs.enabled ? true : contains([0, 1, 3, 5, 7, 14, 30, 60, 90, 120, 150, 180, 365, 400, 545, 731, 1827, 3653], var.logs.retention)
     error_message = "Only one of theese values are allowed for retention: [0, 1, 3, 5, 7, 14, 30, 60, 90, 120, 150, 180, 365, 400, 545, 731, 1827, 3653]."
   }
 }
