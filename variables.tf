@@ -113,7 +113,7 @@ variable "vpc" {
   default = null
 
   validation {
-    condition     = var.vpc == null || (length(var.vpc.subnet_ids) > 0 && length(var.vpc.security_group_ids) > 0)
+    condition     = var.vpc == null ? true : (length(var.vpc.subnet_ids) > 0 && length(var.vpc.security_group_ids) > 0)
     error_message = "If you provide the vpc input, then you have to set both: subnet and security group ids."
   }
 }
