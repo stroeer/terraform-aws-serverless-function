@@ -77,6 +77,12 @@ resource "aws_lambda_function" "lambda" {
   timeout          = var.timeout
   role             = aws_iam_role.lambda.arn
   architectures    = local.architecture
+
+  vpc_config {
+    subnet_ids         = var.vpc.subnet_ids
+    security_group_ids = var.vpc.security_group_ids
+  }
+
   dynamic "environment" {
     for_each = length(var.environment_vars) > 0 ? [1] : []
     content {
@@ -101,6 +107,12 @@ resource "aws_lambda_function" "empty_lambda" {
   handler          = local.handler
   timeout          = var.timeout
   role             = aws_iam_role.lambda.arn
+
+  vpc_config {
+    subnet_ids         = var.vpc.subnet_ids
+    security_group_ids = var.vpc.security_group_ids
+  }
+
   dynamic "environment" {
     for_each = length(var.environment_vars) > 0 ? [1] : []
     content {

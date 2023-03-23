@@ -102,3 +102,18 @@ variable "handler" {
   description = "Sets a custom name for the handler. Leave empty if you want to use the default of this module, which sets the name based on the type (runtime)."
   default     = null
 }
+
+variable "vpc" {
+  type = object({
+    subnet_ids         = list(string)
+    security_group_ids = list(string)
+  })
+  description = "VPC configuration. Be aware that this will change the operational behaviour of your lambda and could have impacts on costs."
+
+  default = null
+
+  validation {
+    condition     = var.vpc == null || (length(var.vpc.subnet_ids) > 0 && length(var.vpc.security_group_ids) > 0)
+    error_message = "If you provide the vpc input, then you have to set both: subnet and security group ids."
+  }
+}
