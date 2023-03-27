@@ -4,7 +4,8 @@ locals {
   bundled_source = var.type == "go" ? "${var.bundle.source_folder}/${var.name}" : var.bundle.source_folder
   empty_source   = "${path.module}/README.md"
   source         = var.bundle.enabled ? local.bundled_source : local.empty_source
-
+  inVpc = var.vpc != null ? 1 : 0
+  
   latest_runtimes = {
     "go" : "go1.x",
     "node" : "nodejs14.x",
@@ -78,9 +79,12 @@ resource "aws_lambda_function" "lambda" {
   role             = aws_iam_role.lambda.arn
   architectures    = local.architecture
 
-  vpc_config {
-    subnet_ids         = var.vpc.subnet_ids
-    security_group_ids = var.vpc.security_group_ids
+  dynamic "vpc_config" {
+    for_each = range(local.inVpc)
+    content {
+      subnet_ids         = var.vpc.subnet_ids
+      security_group_ids = var.vpc.security_group_ids
+    }
   }
 
   dynamic "environment" {
@@ -89,6 +93,7 @@ resource "aws_lambda_function" "lambda" {
       variables = var.environment_vars
     }
   }
+
   depends_on = [
     data.archive_file.code,
     aws_iam_role_policy_attachment.lambda_logs,
@@ -108,9 +113,12 @@ resource "aws_lambda_function" "empty_lambda" {
   timeout          = var.timeout
   role             = aws_iam_role.lambda.arn
 
-  vpc_config {
-    subnet_ids         = var.vpc.subnet_ids
-    security_group_ids = var.vpc.security_group_ids
+  dynamic "vpc_config" {
+    for_each = range(local.inVpc)
+    content {
+      subnet_ids         = var.vpc.subnet_ids
+      security_group_ids = var.vpc.security_group_ids
+    }
   }
 
   dynamic "environment" {
@@ -119,11 +127,13 @@ resource "aws_lambda_function" "empty_lambda" {
       variables = var.environment_vars
     }
   }
+
   depends_on = [
     data.archive_file.code,
     aws_iam_role_policy_attachment.lambda_logs,
     aws_cloudwatch_log_group.lambda,
   ]
+  
   lifecycle {
     ignore_changes = [
       filename,
