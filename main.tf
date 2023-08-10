@@ -59,11 +59,6 @@ resource "aws_iam_role_policy_attachment" "lambda_policies" {
   role       = aws_iam_role.lambda.name
 }
 
-resource "aws_iam_role_policy_attachment" "AWSLambdaVPCAccessExecutionRole" {
-  role       = aws_iam_role.lambda.name
-  policy_arn = "arn:aws:iam::aws:policy/service-role/AWSLambdaVPCAccessExecutionRole"
-}
-
 resource "aws_iam_role_policy" "lambda_policies" {
   count  = length(var.inline_policies) == 0 ? 0 : 1
   name   = "${local.lambda_name}-policies"
