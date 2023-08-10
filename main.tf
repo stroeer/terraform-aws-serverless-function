@@ -5,7 +5,7 @@ locals {
   empty_source   = "${path.module}/README.md"
   source         = var.bundle.enabled ? local.bundled_source : local.empty_source
   inVpc = var.vpc != null ? 1 : 0
-  
+
   latest_runtimes = {
     "go" : "go1.x",
     "node" : "nodejs14.x",
@@ -57,6 +57,11 @@ resource "aws_iam_role_policy_attachment" "lambda_policies" {
   for_each   = var.managed_policies
   policy_arn = each.value
   role       = aws_iam_role.lambda.name
+}
+
+resource "aws_iam_role_policy_attachment" "AWSLambdaVPCAccessExecutionRole" {
+  role       = aws_iam_role.lambda.name
+  policy_arn = "arn:aws:iam::aws:policy/service-role/AWSLambdaVPCAccessExecutionRole"
 }
 
 resource "aws_iam_role_policy" "lambda_policies" {
@@ -133,7 +138,7 @@ resource "aws_lambda_function" "empty_lambda" {
     aws_iam_role_policy_attachment.lambda_logs,
     aws_cloudwatch_log_group.lambda,
   ]
-  
+
   lifecycle {
     ignore_changes = [
       filename,
