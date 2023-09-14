@@ -7,7 +7,7 @@ locals {
   inVpc = var.vpc != null ? 1 : 0
   
   latest_runtimes = {
-    "go" : "go1.x",
+    "go" : "provided.al2",
     "node" : "nodejs14.x",
     "python" : "python3.9",
     "ruby" : "ruby2.7",
@@ -18,7 +18,7 @@ locals {
   runtime = local.latest_runtimes[var.type]
 
   handlers = {
-    "go" : var.name
+    "go" : "bootstrap"
     "node" : "index.handler"
     "custom" : "bootstrap"
   }
