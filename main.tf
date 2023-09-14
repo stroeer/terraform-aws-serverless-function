@@ -1,7 +1,7 @@
 locals {
   lambda_name = "${var.prefix}${var.name}${var.suffix}"
 
-  bundled_source = var.type == "go" || var.type == "custom" ? "${var.bundle.source_folder}/${var.name}" : var.bundle.source_folder
+  bundled_source = var.type == "go" ? "${var.bundle.source_folder}/${var.name}" : var.bundle.source_folder
   empty_source   = "${path.module}/README.md"
   source         = var.bundle.enabled ? local.bundled_source : local.empty_source
   inVpc = var.vpc != null ? 1 : 0
@@ -28,8 +28,8 @@ locals {
 
 data "archive_file" "code" {
   type        = "zip"
-  source_file = var.type == "go" || var.type == "custom" ? local.source : null
-  source_dir  = var.type == "go" || var.type == "custom" ? null : local.source
+  source_file = var.type == "go" ? local.source : null
+  source_dir  = var.type == "go" ? null : local.source
   output_path = "${var.name}.zip"
 }
 
