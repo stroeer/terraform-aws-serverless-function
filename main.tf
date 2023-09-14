@@ -8,9 +8,9 @@ locals {
   
   latest_runtimes = {
     "go" : "provided.al2",
-    "node" : "nodejs14.x",
+    "node" : "nodejs16.x",
     "python" : "python3.9",
-    "ruby" : "ruby2.7",
+    "ruby" : "ruby3.2",
     "java" : "java11",
     ".net" : "dotnet6",
     "custom" : "provided.al2"
