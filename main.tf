@@ -1,10 +1,10 @@
 locals {
   lambda_name = "${var.prefix}${var.name}${var.suffix}"
 
-  bundled_source = var.type == "go" ? "${var.bundle.source_folder}/${var.name}" : var.bundle.source_folder
-  empty_source   = "${path.module}/README.md"
-  source         = var.bundle.enabled ? local.bundled_source : local.empty_source
-  inVpc = var.vpc != null ? 1 : 0
+  bundled_source   = var.type == "go" ? "${var.bundle.source_folder}/${var.name}" : var.bundle.source_folder
+  bootstrap_source = var.bootstrap_folder == "" ? "bootstrap" : "${var.bootstrap_folder}/bootstrap"
+  source           = var.bundle.enabled ? local.bundled_source : local.bootstrap_source
+  inVpc            = var.vpc != null ? 1 : 0
 
   latest_runtimes = {
     "go" : "provided.al2",

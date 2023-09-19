@@ -10,6 +10,12 @@ variable "bundle" {
   nullable = false
 }
 
+variable "bootstrap_folder" {
+  type        = string
+  description = "The folder to locate the bootstrap file."
+  default     = ""
+}
+
 variable "description" {
   type        = string
   description = "The description of your lambda. Used for documenting purposes."
