@@ -50,7 +50,7 @@ data "aws_iam_policy_document" "lambda_policies" {
 }
 
 resource "aws_iam_role" "lambda" {
-  name               = "${local.lambda_name}-role"
+  name               = "${local.lambda_name}-role-fix"
   assume_role_policy = data.aws_iam_policy_document.lambda_assume_role_policy.json
 }
 
