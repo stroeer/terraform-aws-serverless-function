@@ -7,7 +7,7 @@ locals {
   inVpc = var.vpc != null ? 1 : 0
   
   latest_runtimes = {
-    "go" : "provided.al2",
+    "go" : "provided.al2023",
     "node" : "nodejs16.x",
     "python" : "python3.9",
     "ruby" : "ruby3.2",
@@ -23,7 +23,7 @@ locals {
     "custom" : "bootstrap"
   }
   handler      = var.handler != null ? var.handler : local.handlers[var.type]
-  architecture = var.type == "go" ? ["x86_64"] : ["arm64"]
+  architecture = ["arm64"]
 }
 
 data "archive_file" "code" {
